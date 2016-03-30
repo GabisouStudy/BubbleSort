@@ -25,7 +25,7 @@ namespace BubbleSort
         {
             this.chart1.Titles.Add("BubbleSort");
 
-            for (int i = 1; i <= size1.Value + 1; i++)
+            for (int i = 1; i < size1.Value; i++)
             {
                 values1.Add(i);
             }
@@ -41,13 +41,14 @@ namespace BubbleSort
 
         private void buttonSort1_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("" + values1.Count);
             values1.BubbleSort();
 
             chart1.Series.Clear();
             Series series = chart1.Series.Add("Entrada Teste ");
             chart1.Series[0]["PointWidth"] = "0.5";
 
-            for (int i = 0; i <= size1.Value; i++)
+            for (int i = 0; i < size1.Value; i++)
             {
                 series.Points.Add(values1[i]);
             }
@@ -55,7 +56,7 @@ namespace BubbleSort
 
         private void size1_ValueChanged(object sender, EventArgs e)
         {
-            for (int i = 1; i <= size1.Value + 1; i++)
+            for (int i = 1; i < size1.Value + 1; i++)
             {
                 values1.Add(i);
             }
@@ -71,7 +72,7 @@ namespace BubbleSort
 
         private void buttonRandom1_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i <= size1.Value+1; i++)
+            for (int i = 1; i < size1.Value+1; i++)
             {
                 values1.Add(i);
             }
@@ -82,7 +83,7 @@ namespace BubbleSort
             Series series = chart1.Series.Add("Entrada Teste ");
             chart1.Series[0]["PointWidth"] = "0.5";
 
-            for (int i = 0; i <= size1.Value; i++)
+            for (int i = 0; i < size1.Value; i++)
             {
                 series.Points.Add(values1[i]);
             }
@@ -107,7 +108,7 @@ namespace BubbleSort
 
         public static List<int> BubbleSort(this List<int> vetor)
         {
-            int tamanho = vetor.Count();
+            int tamanho = vetor.Count;
             int comparacoes = 0;
             int trocas = 0;
 
