@@ -19,10 +19,19 @@ namespace BubbleSort
             InitializeComponent();
         }
 
-        async Task PutTaskDelay()
+        /*public static Task Delay(double milliseconds)
         {
-            await Task.Delay(5000);
-        }
+            var tcs = new TaskCompletionSource<bool>();
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.Elapsed += (obj, args) =>
+            {
+                tcs.TrySetResult(true);
+            };
+            timer.Interval = milliseconds;
+            timer.AutoReset = false;
+            timer.Start();
+            return tcs.Task;
+        }*/
 
         private int[] RandomArray(int size)
         {
@@ -33,9 +42,10 @@ namespace BubbleSort
             return array;
         }
 
-        private void UpdateChart(Chart c, int[] a, int c1, int c2) {
+        public void UpdateChart(Chart c, int[] a, int c1, int c2, Color cl) {
             Chart chart = c;
             int[] array = a;
+            Color color = cl;
             chart.Series.Clear();
             Series series = chart.Series.Add("");
             chart.Series[0]["PointWidth"] = "0.5";
@@ -44,9 +54,9 @@ namespace BubbleSort
                 chart.Series[0].Points.Add(array[i]);
             }
             if (c1 != c2) {
-
-                chart1.Series[0].Points[c1].Color = Color.Red;
-                chart1.Series[0].Points[c2].Color = Color.Red;
+                
+                chart1.Series[0].Points[c1].Color = color;
+                chart1.Series[0].Points[c2].Color = color;
             }
         }
 
@@ -58,30 +68,70 @@ namespace BubbleSort
 
             values1 = RandomArray(int.Parse("" + (size1.Value + 1)));
 
-            UpdateChart(chart1, values1, 0, 0);
+            UpdateChart(chart1, values1, 0, 0, Color.Red);
 
             //Series series = chart.Series.Add("");
         }
 
+        public async Task BubbleSort()
+        {
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < values1.Length - 1; i++)
+                {
+                    for (int j = i + 1; j < values1.Length; j++)
+                    {
+                        UpdateChart(chart1, values1, i, j, Color.Red);
+                        chart1.Update();
+                        //System.Threading.Thread.Sleep(1);
+                        //Delay(int.Parse("" + velocity1.Value));
+                        if (values1[i] > values1[j])
+                        {
+                            UpdateChart(chart1, values1, i, j, Color.Yellow);
+                            chart1.Update();
+                            //Delay(500000000);
+                            //System.Threading.Thread.Sleep(300);
+                            Task.Delay(50000);
+                            int temp = values1[i];
+                            values1[i] = values1[j];
+                            values1[j] = temp;
+
+                            //await PutTaskDelay();
+                            //System.Threading.Thread.Sleep(100);
+                        }
+                    }
+                    UpdateChart(chart1, values1, 0, 0, Color.Yellow);
+                }
+            });
+        }
+
         private void buttonSort1_Click(object sender, EventArgs e)
         {
+            //BubbleSort();
             for (int i = 0; i < values1.Length - 1; i++)
             {
                 for (int j = i + 1; j < values1.Length; j++)
                 {
+                    UpdateChart(chart1, values1, i, j, Color.Red);
+                    chart1.Update();
+                    //System.Threading.Thread.Sleep(1);
+                    //Delay(int.Parse("" + velocity1.Value));
                     if (values1[i] > values1[j])
                     {
+                        UpdateChart(chart1, values1, i, j, Color.Yellow);
+                        chart1.Update();
+                        Task.Delay(500);
+                        //System.Threading.Thread.Sleep(300);
+                        Task.Delay(50000);
                         int temp = values1[i];
                         values1[i] = values1[j];
                         values1[j] = temp;
-                        chart1.Update();
 
                         //await PutTaskDelay();
                         //System.Threading.Thread.Sleep(100);
                     }
-                    UpdateChart(chart1, values1, i, j);
-                    System.Threading.Thread.Sleep(500);
                 }
+                UpdateChart(chart1, values1, 0, 0, Color.Yellow);
             }
 
         }
@@ -90,7 +140,7 @@ namespace BubbleSort
         {
             values1 = RandomArray(int.Parse("" + (size1.Value + 1)));
 
-            UpdateChart(chart1, values1, 0, 0);
+            UpdateChart(chart1, values1, 0, 0, Color.Red);
         }
 
         private void buttonRandom1_Click(object sender, EventArgs e)
