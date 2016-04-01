@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -37,7 +37,7 @@ namespace BubbleSort
             int[] array = new int[size];
             Random r = new Random();
             for (int i = 0; i < size; i++)
-                array[i] = (r.Next(0, 200));
+                array[i] = (r.Next(1, size));
             return array;
         }
 
@@ -67,6 +67,10 @@ namespace BubbleSort
             buttonAbort1.Enabled = true;
 
             int comp1 = 0;
+
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             for (int i = 0; i < values1.Length - 1; i++)
             {
                 for (int j = i + 1; j < values1.Length; j++)
@@ -74,7 +78,6 @@ namespace BubbleSort
                     if (abort) {
                         break;
                     }
-
                     UpdateChart(chart1, values1, i, j, Color.Red);
                     chart1.Update();
                     await Task.Delay(int.Parse("" + velocity1.Value));
@@ -88,6 +91,14 @@ namespace BubbleSort
                         values1[i] = values1[j];
                         values1[j] = temp;
                     }
+
+                    stopWatch.Stop();
+
+                    long t = stopWatch.ElapsedMilliseconds;
+                    textBoxTime.Text = "" + t;
+
+                    stopWatch.Start();
+
                 }
                 UpdateChart(chart1, values1, 0, 0, Color.Yellow);
             }
@@ -96,6 +107,12 @@ namespace BubbleSort
             size1.Enabled = true;
             abort = false;
             buttonAbort1.Enabled = false;
+            
+            stopWatch.Stop();
+
+            long time = stopWatch.ElapsedMilliseconds;
+            textBoxTime.Text = "" + time;
+
         }
 
         private void size1_ValueChanged(object sender, EventArgs e)
