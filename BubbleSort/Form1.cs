@@ -15,30 +15,22 @@ namespace BubbleSort
 {
     public partial class Form1 : Form
     {
-
-        async Task MakeDelay(int d)
-        {
-            await Task.Delay(d);
-        }
+        int[] values1;
+        bool abort = false;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        /*public static Task Delay(double milliseconds)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            var tcs = new TaskCompletionSource<bool>();
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Elapsed += (obj, args) =>
-            {
-                tcs.TrySetResult(true);
-            };
-            timer.Interval = milliseconds;
-            timer.AutoReset = false;
-            timer.Start();
-            return tcs.Task;
-        }*/
+            this.chart1.Titles.Add("BubbleSort");
+            values1 = RandomArray(int.Parse("" + (size1.Value + 1)));
+            UpdateChart(chart1, values1, 0, 0, Color.Red);
+
+            buttonAbort1.Enabled = false;
+        }
 
         private int[] RandomArray(int size)
         {
@@ -67,80 +59,44 @@ namespace BubbleSort
             }
         }
 
-        int[] values1;
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.chart1.Titles.Add("BubbleSort");
-
-            values1 = RandomArray(int.Parse("" + (size1.Value + 1)));
-
-            UpdateChart(chart1, values1, 0, 0, Color.Red);
-
-            //Series series = chart.Series.Add("");
-        }
-
-        public async Task BubbleSort()
-        {
-            await Task.Run(() =>
-            {
-                for (int i = 0; i < values1.Length - 1; i++)
-                {
-                    for (int j = i + 1; j < values1.Length; j++)
-                    {
-                        UpdateChart(chart1, values1, i, j, Color.Red);
-                        chart1.Update();
-                        //System.Threading.Thread.Sleep(1);
-                        //Delay(int.Parse("" + velocity1.Value));
-                        if (values1[i] > values1[j])
-                        {
-                            UpdateChart(chart1, values1, i, j, Color.Yellow);
-                            chart1.Update();
-                            //System.Threading.Thread.Sleep(300);
-                            //Task.Delay(50000);
-                            int temp = values1[i];
-                            values1[i] = values1[j];
-                            values1[j] = temp;
-
-                            //await PutTaskDelay();
-                            //System.Threading.Thread.Sleep(100);
-                        }
-                    }
-                    UpdateChart(chart1, values1, 0, 0, Color.Yellow);
-                }
-            });
-        }
-
         private async void buttonSort1_Click(object sender, EventArgs e)
         {
-            //BubbleSort();
+            buttonSort1.Enabled = false;
+            size1.Enabled = false;
+
+            buttonAbort1.Enabled = true;
+
+            int comp1 = 0;
             for (int i = 0; i < values1.Length - 1; i++)
             {
                 for (int j = i + 1; j < values1.Length; j++)
                 {
+                    if (abort) {
+                        break;
+                    }
+
                     UpdateChart(chart1, values1, i, j, Color.Red);
                     chart1.Update();
-                    await Task.Delay(500);
-                    //System.Threading.Thread.Sleep(1);
-                    //Delay(int.Parse("" + velocity1.Value));
+                    await Task.Delay(int.Parse("" + velocity1.Value));
+                    comp1++;
+                    textBoxComp.Text = "" + comp1;
                     if (values1[i] > values1[j])
                     {
-                        UpdateChart(chart1, values1, i, j, Color.Yellow);
+                        UpdateChart(chart1, values1, i, j, Color.GreenYellow);
                         chart1.Update();
-                        //await MakeDelay(1000);
-                        //System.Threading.Thread.Sleep(300);
-                        await Task.Delay(300);
+                    await Task.Delay((int.Parse("" + velocity1.Value) / 4) * 3);
                         int temp = values1[i];
                         values1[i] = values1[j];
                         values1[j] = temp;
-
-                        //await PutTaskDelay();
-                        //System.Threading.Thread.Sleep(100);
                     }
                 }
                 UpdateChart(chart1, values1, 0, 0, Color.Yellow);
             }
 
+            buttonSort1.Enabled = true;
+            size1.Enabled = true;
+            abort = false;
+            buttonAbort1.Enabled = false;
         }
 
         private void size1_ValueChanged(object sender, EventArgs e)
@@ -150,9 +106,9 @@ namespace BubbleSort
             UpdateChart(chart1, values1, 0, 0, Color.Red);
         }
 
-        private void buttonRandom1_Click(object sender, EventArgs e)
+        private void buttonAbort1_Click(object sender, EventArgs e)
         {
-
+            abort = true;
         }
     }
 }
