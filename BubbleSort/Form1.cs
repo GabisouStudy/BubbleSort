@@ -126,5 +126,10 @@ namespace BubbleSort
         {
             abort = true;
         }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            abort = true;
+        }
     }
 }
