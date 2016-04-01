@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -13,6 +15,11 @@ namespace BubbleSort
 {
     public partial class Form1 : Form
     {
+
+        async Task MakeDelay(int d)
+        {
+            await Task.Delay(d);
+        }
 
         public Form1()
         {
@@ -89,9 +96,8 @@ namespace BubbleSort
                         {
                             UpdateChart(chart1, values1, i, j, Color.Yellow);
                             chart1.Update();
-                            //Delay(500000000);
                             //System.Threading.Thread.Sleep(300);
-                            Task.Delay(50000);
+                            //Task.Delay(50000);
                             int temp = values1[i];
                             values1[i] = values1[j];
                             values1[j] = temp;
@@ -105,7 +111,7 @@ namespace BubbleSort
             });
         }
 
-        private void buttonSort1_Click(object sender, EventArgs e)
+        private async void buttonSort1_Click(object sender, EventArgs e)
         {
             //BubbleSort();
             for (int i = 0; i < values1.Length - 1; i++)
@@ -114,15 +120,16 @@ namespace BubbleSort
                 {
                     UpdateChart(chart1, values1, i, j, Color.Red);
                     chart1.Update();
+                    await Task.Delay(500);
                     //System.Threading.Thread.Sleep(1);
                     //Delay(int.Parse("" + velocity1.Value));
                     if (values1[i] > values1[j])
                     {
                         UpdateChart(chart1, values1, i, j, Color.Yellow);
                         chart1.Update();
-                        Task.Delay(500);
+                        //await MakeDelay(1000);
                         //System.Threading.Thread.Sleep(300);
-                        Task.Delay(50000);
+                        await Task.Delay(300);
                         int temp = values1[i];
                         values1[i] = values1[j];
                         values1[j] = temp;
