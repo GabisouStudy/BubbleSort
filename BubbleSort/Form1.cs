@@ -80,11 +80,10 @@ namespace BubbleSort
                     await Task.Delay(int.Parse("" + velocity1.Value));
                     comp1++;
                     textBoxComp.Text = "" + comp1;
-                    if (values1[i] > values1[j])
-                    {
+                    if (values1[i] > values1[j]) {
                         UpdateChart(chart1, values1, i, j, Color.GreenYellow);
                         chart1.Update();
-                    await Task.Delay((int.Parse("" + velocity1.Value) / 4) * 3);
+                        await Task.Delay((int.Parse("" + velocity1.Value) / 4) * 3);
                         int temp = values1[i];
                         values1[i] = values1[j];
                         values1[j] = temp;
